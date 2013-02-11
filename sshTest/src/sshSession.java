@@ -2,7 +2,7 @@ import com.jcraft.jsch.*;
 
 import java.io.*;
 
-public class sshTest {
+public class sshSession {
 
 	String userName;
 	String password;
@@ -22,9 +22,13 @@ public class sshTest {
 	
 	public void openSession(String usrName,String host, String pswd)
 	{
+		//workaround so the user doesn't have to set their fingerprint, ie. update known_hosts
+		JSch.setConfig("StrictHostKeyChecking", "no");
+		
 		try
 		{
 		session=jsch.getSession(usrName, host, 22);
+		session.setPassword(pswd);
 		session.connect();
 		}
 		catch(Exception e)
