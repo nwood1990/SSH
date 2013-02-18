@@ -1,10 +1,9 @@
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-
 public class sshDriver {
 
-	public static String status(int num)
+	public static String getStatus(int num)
 	{
 		//  0 for success,
 		//  1 for error,
@@ -32,7 +31,30 @@ public class sshDriver {
 		String remote_file = "/home/testuser/remote_file.txt";
 		int status = 0;
 
+		//remote to local
+		local_file = String.format("/home/littlejerry/" + System.currentTimeMillis());
+
+		remote_file = String.format("/home/testuser/mesh_result.txt");
+
 		s.openSession(userName, host, password);
+		if (s.session.isConnected())
+		{
+			try {
+				status = s.copyFileFromRemote(s.session, remote_file, local_file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("scp transfer status =:  " + getStatus(status));
+
+			s.closeSession();
+		}
+		else
+		{
+			System.out.println("ssh connection failed");
+		}
+
+		//local to remote
+		/*s.openSession(userName, host, password);
 		if (s.session.isConnected())
 		{
 			try {
@@ -50,7 +72,7 @@ public class sshDriver {
 		{
 			System.out.println("connection failed");
 		}
-
+		 */
 	}
 
 }
